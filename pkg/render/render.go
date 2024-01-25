@@ -60,16 +60,19 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	}
 	//range through all files ending with *.page.tmpl
 	for _, page := range pages {
+		//extract file name
 		name := filepath.Base(page)
 		ts, err := template.New(name).ParseFiles(page)
 		if err != nil {
 			return myCache, err
 		}
+		//get match layout file (layout.tmpl)
 		matches, err := filepath.Glob("./templates/*.layout.tmpl")
 		if err != nil {
 			return myCache, err
 		}
 
+		//if found update by parsing to ts
 		if len(matches) > 0 {
 			ts, err = ts.ParseGlob("./templates/*.layout.tmpl")
 			if err != nil {
